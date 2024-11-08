@@ -2,48 +2,35 @@ import math
 
 class Misherramientas:
     def __init__(self, lista_numeros):
-        self.lista = lista_numeros
+        if not isinstance(lista_numeros, list):
+            self.lista = [lista_numeros]
+        else:
+            self.lista = lista_numeros
 
     def primo(self, numero):
         if numero < 2:
             return False
-        for i in range(2, numero):
+        for i in range(2, int(math.sqrt(numero)) + 1):
             if numero % i == 0:
                 return False
         return True
 
     def numeros_primos(self):
-        Lprimos = []
-        for i in self.lista:
-            if self.primo(i) == True:
-                Lprimos.append(i)
-        return Lprimos
-    
-    def numero_repetido(self, numerosR):
-        max_repetidos = 0
-        repite = 0
-        for i in numerosR:
-            contador = numerosR.count(i)
-            if contador > max_repetidos:
-                max_repetidos = contador
-                repite = i
-        return  [repite, max_repetidos]
-    
-    def mas_repetido(self):
-        # Crea un diccionario para contar la frecuencia de cada número
+        return [self.primo(i) for i in self.lista] 
+
+    def numero_repetido(self):
         frecuencias = {}
         for num in self.lista:
-            if num in frecuencias:
-                frecuencias[num] += 1
-            else:
-                frecuencias[num] = 1
-
-        # Busca el número con la frecuencia más alta
+            frecuencias[num] = frecuencias.get(num, 0) + 1
         max_frecuencia = max(frecuencias.values())
-        mas_repetido = [num for num, freq in frecuencias.items() if freq == max_frecuencia][0]
+        return [num for num, freq in frecuencias.items() if freq == max_frecuencia][0], max_frecuencia
 
-        return mas_repetido, max_frecuencia
-    
+    def mas_repetido(self):
+        frecuencias = {}
+        for num in self.lista:
+            frecuencias[num] = frecuencias.get(num, 0) + 1
+        return max(frecuencias, key=lambda x: frecuencias[x]), max(frecuencias.values())
+
     def convertir_temperatura(self, valor, origen, destino):
         if not isinstance(valor, (int, float)):
             raise ValueError("El valor debe ser un número")
@@ -68,16 +55,10 @@ class Misherramientas:
             return (valor - 273.15) * 9/5 + 32
         else:
             raise ValueError("Origen o destino no válido")
-    
 
     def c_factorial(self, numero):
-        factorial = 0
-        if type(numero) != int:
-            return 'Debe imgresar un numero entero'
+        if not isinstance(numero, int):
+            return 'Debe ingresar un número entero'
         if numero < 0:
-            return 'el numero debe ser positivo'
-        if numero <= 1:
-            return 1
-    
-        factorial = math.factorial(numero)
-        return factorial
+            return 'El número debe ser positivo'
+        return math.factorial(numero)
